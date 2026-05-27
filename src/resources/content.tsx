@@ -176,25 +176,13 @@ const about: About = {
         name: "Sainik School Sujanpur Tira",
         description: (
           <>
-            Higher Secondary Education, Super Science | Apr 2016 – Apr 2023 | Grade: 85.2%
+            Higher Secondary Education, Super Science & Matriculation, Secondary Education | 2016 – 2023 | 12th: 85.2%, 10th: 88.8%
           </>
         ),
-        degree: "Higher Secondary Education, Super Science",
-        startYear: "Apr 2016",
-        graduation: "Apr 2023",
-        grade: "85.2%",
-      },
-      {
-        name: "Sainik School Sujanpur Tira",
-        description: (
-          <>
-            Matriculation, Secondary Education | Mar 2020 – Mar 2021 | Grade: 88.8%
-          </>
-        ),
-        degree: "Matriculation, Secondary Education",
-        startYear: "Mar 2020",
-        graduation: "Mar 2021",
-        grade: "88.8%",
+        degree: "Higher Secondary Education, Super Science & Matriculation",
+        startYear: "2016",
+        graduation: "2023",
+        grade: "12th: 85.2% | 10th: 88.8%",
       },
     ],
   },
