@@ -296,8 +296,8 @@ const work: Work = {
 const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
-  title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
+  title: "Moments & Milestones",
+  description: "Building tech, leading teams, and turning ideas into reality.",
   images: [
     {
       src: "/gallery/DSC08427.JPG.jpeg",
