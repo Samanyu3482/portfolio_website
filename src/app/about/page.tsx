@@ -1,0 +1,364 @@
+import {
+  Avatar,
+  Button,
+  Column,
+  Heading,
+  Icon,
+  IconButton,
+  Tag,
+  Text,
+  Meta,
+  Schema,
+  Row,
+} from "@once-ui-system/core";
+import { baseURL, about, person, social } from "@/resources";
+import TableOfContents from "@/components/about/TableOfContents";
+import styles from "@/components/about/about.module.scss";
+import React from "react";
+
+export async function generateMetadata() {
+  return Meta.generate({
+    title: about.title,
+    description: about.description,
+    baseURL: baseURL,
+    image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
+    path: about.path,
+  });
+}
+
+export default function About() {
+  const structure = [
+    {
+      title: about.intro.title,
+      display: about.intro.display,
+      items: [],
+    },
+    {
+      title: about.work.title,
+      display: about.work.display,
+      items: about.work.experiences.map((experience) => experience.company),
+    },
+    {
+      title: about.technical.title,
+      display: about.technical.display,
+      items: about.technical.skills.map((skill) => skill.title),
+    },
+  ];
+  return (
+    <Column fillWidth>
+      <Schema
+        as="webPage"
+        baseURL={baseURL}
+        title={about.title}
+        description={about.description}
+        path={about.path}
+        image={`/api/og/generate?title=${encodeURIComponent(about.title)}`}
+        author={{
+          name: person.name,
+          url: `${baseURL}${about.path}`,
+          image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      {about.tableOfContent.display && (
+        <Column
+          left="0"
+          style={{ top: "50%", transform: "translateY(-50%)" }}
+          position="fixed"
+          paddingLeft="24"
+          gap="32"
+          s={{ hide: true }}
+        >
+          <TableOfContents structure={structure} about={about} />
+        </Column>
+      )}
+      <Row fillWidth s={{ direction: "column" }} horizontal="center" vertical="start">
+        {about.avatar.display && (
+          <Column
+            className={styles.avatar}
+            top="64"
+            fitHeight
+            position="sticky"
+            s={{ position: "relative", style: { top: "auto" } }}
+            xs={{ style: { top: "auto" } }}
+            minWidth="160"
+            paddingRight="l"
+            paddingBottom="xl"
+            gap="m"
+            flex={3}
+            horizontal="start"
+          >
+            <Avatar src={person.avatar} size="xl" />
+            <Row gap="8" vertical="center">
+              <Icon onBackground="accent-weak" name="globe" />
+              {person.location}
+            </Row>
+            {person.languages && person.languages.length > 0 && (
+              <Row wrap gap="8">
+                {person.languages.map((language, index) => (
+                  <Tag key={index} size="l">
+                    {language}
+                  </Tag>
+                ))}
+              </Row>
+            )}
+            {about.studies.display && (
+              <Column gap="12" paddingTop="l" fillWidth>
+                <Row gap="8" vertical="center">
+                  <Icon name="book" size="s" onBackground="accent-weak" />
+                  <Text variant="label-strong-s" onBackground="neutral-weak">
+                    Education
+                  </Text>
+                </Row>
+                {about.studies.institutions.map((institution, index) => (
+                  <Column
+                    key={index}
+                    gap="16"
+                    padding="16"
+                    border="neutral-alpha-medium"
+                    radius="m"
+                    fillWidth
+                    style={{ background: "var(--surface-raised-background)" }}
+                  >
+                    {/* Institution name & degree */}
+                    <Column gap="4">
+                      <Text variant="body-strong-m">{institution.name}</Text>
+                      {institution.degree && (
+                        <Text variant="body-default-s" onBackground="brand-weak">
+                          {institution.degree}
+                        </Text>
+                      )}
+                    </Column>
+
+                    {/* Divider */}
+                    <Row fillWidth style={{ height: "1px", background: "var(--neutral-alpha-medium)" }} />
+
+                    {/* Stats grid */}
+                    <Row fillWidth wrap gap="16">
+                      {institution.startYear && (
+                        <Column gap="2" flex={1} minWidth={70}>
+                          <Text variant="label-default-xs" onBackground="neutral-weak">
+                            Started
+                          </Text>
+                          <Text variant="body-strong-s">{institution.startYear}</Text>
+                        </Column>
+                      )}
+                      {institution.graduation && (
+                        <Column gap="2" flex={1} minWidth={80}>
+                          <Text variant="label-default-xs" onBackground="neutral-weak">
+                            {institution.gpa ? "Expected Graduation" : "Completed"}
+                          </Text>
+                          <Text variant="body-strong-s">{institution.graduation}</Text>
+                        </Column>
+                      )}
+                      {institution.gpa && (
+                        <Column gap="2" flex={1} minWidth={60}>
+                          <Text variant="label-default-xs" onBackground="neutral-weak">
+                            CGPA
+                          </Text>
+                          <Text variant="body-strong-s" onBackground="brand-weak">
+                            {institution.gpa} / 10
+                          </Text>
+                        </Column>
+                      )}
+                      {institution.grade && (
+                        <Column gap="2" flex={1} minWidth={60}>
+                          <Text variant="label-default-xs" onBackground="neutral-weak">
+                            Grade
+                          </Text>
+                          <Text variant="body-strong-s" onBackground="brand-weak">
+                            {institution.grade}
+                          </Text>
+                        </Column>
+                      )}
+                      {institution.rank && (
+                        <Column gap="2" flex={1} minWidth={70}>
+                          <Text variant="label-default-xs" onBackground="neutral-weak">
+                            Academic Rank
+                          </Text>
+                          <Text variant="body-strong-s">🏆 {institution.rank}</Text>
+                        </Column>
+                      )}
+                    </Row>
+                  </Column>
+                ))}
+              </Column>
+            )}
+          </Column>
+        )}
+        <Column className={styles.blockAlign} flex={9} paddingLeft="l">
+          <Column
+            id={about.intro.title}
+            fillWidth
+            minHeight="160"
+            vertical="center"
+            marginBottom="32"
+          >
+            {about.calendar.display && (
+              <Row
+                fitWidth
+                border="brand-alpha-medium"
+                background="brand-alpha-weak"
+                radius="full"
+                padding="4"
+                gap="8"
+                marginBottom="m"
+                vertical="center"
+                className={styles.blockAlign}
+                style={{
+                  backdropFilter: "blur(var(--static-space-1))",
+                }}
+              >
+                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
+                <Row paddingX="8">Schedule a call</Row>
+                <IconButton
+                  href={about.calendar.link}
+                  data-border="rounded"
+                  variant="secondary"
+                  icon="chevronRight"
+                />
+              </Row>
+            )}
+            <Heading className={styles.textAlign} variant="display-strong-xl">
+              {person.name}
+            </Heading>
+            <Text
+              className={styles.textAlign}
+              variant="display-default-xs"
+              onBackground="neutral-weak"
+            >
+              {person.role}
+            </Text>
+            {social.length > 0 && (
+              <Row
+                className={styles.blockAlign}
+                paddingTop="20"
+                paddingBottom="8"
+                gap="8"
+                wrap
+                horizontal="center"
+                fitWidth
+                data-border="rounded"
+              >
+                {social
+                  .filter((item) => item.essential)
+                  .map(
+                    (item) =>
+                      item.link && (
+                        <React.Fragment key={item.name}>
+                          <Row s={{ hide: true }}>
+                            <Button
+                              key={item.name}
+                              href={item.link}
+                              prefixIcon={item.icon}
+                              label={item.name}
+                              size="s"
+                              weight="default"
+                              variant="secondary"
+                            />
+                          </Row>
+                          <Row hide s={{ hide: false }}>
+                            <IconButton
+                              size="l"
+                              key={`${item.name}-icon`}
+                              href={item.link}
+                              icon={item.icon}
+                              variant="secondary"
+                            />
+                          </Row>
+                        </React.Fragment>
+                      ),
+                  )}
+              </Row>
+            )}
+          </Column>
+
+          {about.intro.display && (
+            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+              {about.intro.description}
+            </Column>
+          )}
+
+          {about.technical.display && (
+            <>
+              <Heading
+                as="h2"
+                id={about.technical.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
+                {about.technical.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {about.technical.skills.map((skill, index) => (
+                  <Column key={`${skill}-${index}`} fillWidth gap="8">
+                    <Text id={skill.title} variant="heading-strong-l">
+                      {skill.title}
+                    </Text>
+                    {skill.tags && skill.tags.length > 0 && (
+                      <Row wrap gap="8">
+                        {skill.tags.map((tag, tagIndex) => (
+                          <Tag key={`${skill.title}-${tagIndex}`} size="l" prefixIcon={tag.icon}>
+                            {tag.name}
+                          </Tag>
+                        ))}
+                      </Row>
+                    )}
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+
+          {about.work.display && (
+            <>
+              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+                {about.work.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {about.work.experiences.map((experience, index) => (
+                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
+                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
+                      <Text id={experience.company} variant="heading-strong-l">
+                        {experience.company}
+                      </Text>
+                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                        {experience.timeframe}
+                      </Text>
+                    </Row>
+                    <Row fillWidth horizontal="between" vertical="center" marginTop="m">
+                      <Text variant="body-default-s" onBackground="brand-weak">
+                        {experience.role}
+                      </Text>
+                      <Row gap="8">
+                        {experience.projectLink && (
+                          <Button
+                            href={experience.projectLink}
+                            prefixIcon="arrowRight"
+                            label="View Project"
+                            size="s"
+                            weight="default"
+                            variant="primary"
+                          />
+                        )}
+                        {experience.link && (
+                          <Button
+                            href={experience.link}
+                            prefixIcon="github"
+                            label="GitHub"
+                            size="s"
+                            weight="default"
+                            variant="secondary"
+                          />
+                        )}
+                      </Row>
+                    </Row>
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+        </Column>
+      </Row>
+    </Column>
+  );
+}
